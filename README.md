@@ -1,6 +1,6 @@
-# Template for C++ Code base
+# Simple TCP/IP Client
 
-This is a template for C++ code bases uses for Computer Networks (CS 528). 
+Intended to have a nelcat listener ready before starting client. Created to test template-cpp
 
 ## Getting Started (Development)
 
@@ -9,7 +9,6 @@ git submodule update --init --recursive
 ```
 
 ## VSCode Extensions
-* Clang Format (with auto format on save turned on)
 * C/C++
 * C/C++ Extensions Pack
 * CMake Tools
@@ -19,5 +18,7 @@ git submodule update --init --recursive
 This project uses vscode dev containers. Modified `docker/build-env.Dockerfile` for required project dependencies and run the vscode command `> Dev Containers: Rebuild and Reopen in Container` to open this project in a dev container. 
 
 ## Contributors
+
+* Gregory Maldonado
 
 Binghamton University, School of Computing. 2025. 

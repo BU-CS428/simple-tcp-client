@@ -16,12 +16,55 @@
  * SOFTWARE.
  */
 
-#include <cstdlib>
+#include <arpa/inet.h>
+#include <cstring>
 #include <iostream>
+#include <memory>
+#include <netinet/in.h>
 #include <spdlog/spdlog.h>
+#include <string>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <errno.h>
 
-int main(void) {
+#define HOST "127.0.0.1"
+#define PORT 8080
 
-  SPDLOG_INFO("Hello, Hello!");
-  return EXIT_SUCCESS;
+int main()
+{
+    int sock{0};
+    struct sockaddr_in serv_addr{};
+
+    // Creating socket file descriptor
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+        SPDLOG_ERROR("Failed to create socket");
+        return EXIT_FAILURE;
+    }
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(PORT);
+
+    SPDLOG_INFO("Attempting to connect to {}:{} ...", HOST, PORT);
+    if (inet_pton(AF_INET, HOST, &serv_addr.sin_addr) <= 0)
+    {
+        SPDLOG_ERROR("Invalid address / Address not supported");
+        return EXIT_FAILURE;
+    }
+
+    // Connect to the server
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    {
+        SPDLOG_ERROR("Connection Failed: {}", strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    std::string msg{"Hello from client\n"};
+    send(sock, msg.c_str(), msg.size(), 0);
+    SPDLOG_INFO("Msg Sent [size {}]: {}", std::to_string(msg.size()), msg);
+
+    close(sock);
+
+    return EXIT_SUCCESS;
 }

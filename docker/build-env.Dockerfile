@@ -19,3 +19,5 @@ RUN apt install -y build-essential \
                        tcpdump \
                        net-tools \
                        git
+
+EXPOSE 8080
